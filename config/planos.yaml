@@ -1,0 +1,34 @@
+# Planos e limites técnicos — Vértice
+# Simulação — dados sintéticos para treinamento.
+# Responsável: Produto (Otávio Rangel). Atualizado em 14/10/2026.
+# Preços e condições comerciais NÃO estão aqui: ver comercial/guia-escopo-comercial-e-implantacao.md
+
+planos:
+  essencial:
+    usuarios_minimos: 5
+    integracoes_catalogo: false
+    importacao_csv: true
+    webhook_entrada: false
+    sso_saml: false
+    auditoria_visualizacao: false
+  crescimento:
+    usuarios_minimos: 15
+    integracoes_catalogo: [gmail, microsoft365, google_calendar]
+    importacao_csv: true
+    webhook_entrada: true
+    webhook_saida: false
+    sso_saml: false
+    auditoria_visualizacao: false
+  enterprise:
+    unidade_operacional:
+      usuarios_por_unidade: 60
+    integracoes_catalogo: [gmail, microsoft365, google_calendar]
+    importacao_csv: true
+    webhook_entrada: true
+    webhook_saida: true
+    api_rest_leitura: true
+    sso_saml: true
+    m365_admin_consent: beta
+    auditoria_visualizacao: beta
+    objetos_personalizados: 10
+    fontes_webhook: 5

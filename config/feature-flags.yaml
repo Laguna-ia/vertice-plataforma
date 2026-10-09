@@ -1,0 +1,83 @@
+# Feature flags da plataforma Vértice — estado em produção
+# Simulação — dados sintéticos para treinamento.
+# Responsável: Engenharia de Plataforma (Helena Duarte). Atualizado em 14/10/2026 (v4.11.2).
+#
+# default: valor para todos os clientes elegíveis
+# planos: planos em que a flag PODE ser ligada
+# liberacao: ga | beta | desenvolvimento
+# clientes_habilitados: inquilinos com a flag ligada fora do default (IDs internos)
+
+flags:
+  sso.saml:
+    descricao: Login único SAML 2.0 (Entra, Okta, Google Workspace)
+    liberacao: ga
+    desde: v4.11.0   # beta desde v4.9.0
+    planos: [enterprise]
+    default: true
+
+  sso.jit_provisioning:
+    descricao: Criação de usuário no primeiro login via SSO
+    liberacao: ga
+    desde: v4.11.0
+    planos: [enterprise]
+    default: true
+
+  identidade.scim:
+    descricao: Provisionamento SCIM 2.0
+    liberacao: desenvolvimento
+    planos: []
+    default: false
+
+  m365.admin_consent:
+    descricao: Consentimento por administrador do tenant Microsoft 365
+    liberacao: beta
+    desde: v4.10.0
+    ga_planejado: v4.12   # planejado, sem compromisso de data
+    planos: [enterprise]
+    default: false
+    clientes_habilitados: [tn_0317, tn_0402]
+
+  audit.record_view_log:
+    descricao: Registro de visualização de registros ("quem viu o quê")
+    liberacao: beta
+    desde: v4.11.0
+    planos: [enterprise]
+    default: false
+    retencao_dias: 90
+    clientes_habilitados: [tn_0317]
+
+  audit.siem_stream:
+    descricao: Envio contínuo de auditoria para SIEM
+    liberacao: desenvolvimento
+    planos: []
+    default: false
+
+  csv.sftp_scheduled_import:
+    descricao: Importação CSV agendada via SFTP
+    liberacao: desenvolvimento
+    planos: []
+    default: false
+
+  webhook.inbound:
+    descricao: Webhook de entrada
+    liberacao: ga
+    planos: [crescimento, enterprise]
+    default: true
+
+  webhook.outbound:
+    descricao: Webhook de saída
+    liberacao: ga
+    planos: [enterprise]
+    default: true
+
+  assistente.enabled:
+    descricao: Briefing, próximo passo e atualização assistida
+    liberacao: ga
+    planos: [essencial, crescimento, enterprise]
+    default: true
+
+  assistente.regiao_br:
+    descricao: Inferência do assistente em região brasileira
+    liberacao: desenvolvimento   # sem projeto ativo; ver ADR-021
+    planos: []
+    default: false

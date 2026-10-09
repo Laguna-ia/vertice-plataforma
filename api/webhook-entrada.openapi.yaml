@@ -1,0 +1,42 @@
+# Contrato do webhook de entrada — Vértice
+# Simulação — dados sintéticos para treinamento.
+openapi: 3.0.3
+info:
+  title: Vértice — Webhook de entrada
+  version: "1.4"
+  description: Eventos enviados pelo sistema do cliente para a Vértice. Mão única (ver ADR-014).
+servers:
+  - url: https://hooks.vertice.example/v1
+paths:
+  /in/{tenant_id}/{fonte}:
+    post:
+      summary: Recebe um evento de um sistema do cliente
+      parameters:
+        - {name: tenant_id, in: path, required: true, schema: {type: string}}
+        - {name: fonte, in: path, required: true, schema: {type: string}, description: "Fonte configurada (ex.: erp-contratos)"}
+        - {name: X-Vertice-Signature, in: header, required: true, schema: {type: string}, description: "HMAC-SHA256 do corpo, hex"}
+        - {name: X-Vertice-Timestamp, in: header, required: true, schema: {type: integer}, description: "Epoch em segundos; tolerância de 300 s"}
+        - {name: Idempotency-Key, in: header, required: true, schema: {type: string, maxLength: 128}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo, objeto, chave, campos]
+              properties:
+                tipo: {type: string, enum: [registro.criado, registro.atualizado, registro.removido]}
+                objeto: {type: string, example: contrato}
+                chave: {type: string, description: "Identificador do registro na origem", example: "CT-2024-0187"}
+                campos:
+                  type: object
+                  description: "Somente campos mapeados são gravados; os demais são descartados"
+                  example: {vigencia_fim: "2027-03-31", gestor: "Sergio Andrade"}
+      responses:
+        "202": {description: Aceito}
+        "400": {description: "Evento inválido (WEBHOOK_SCHEMA_400)"}
+        "401": {description: "Assinatura ou timestamp inválidos (WEBHOOK_AUTH_401)"}
+        "410": {description: "Fonte desativada"}
+        "413": {description: "Corpo acima de 256 KB"}
+        "429": {description: "Limite de 50 req/s excedido"}
+        "503": {description: "Falha temporária; o emissor deve reenviar"}

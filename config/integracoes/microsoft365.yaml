@@ -1,0 +1,31 @@
+# Manifesto da integração Microsoft 365
+# Simulação — dados sintéticos para treinamento.
+# Responsável: Engenharia de Plataforma. Versão do manifesto: 7 (v4.11.2, 14/10/2026)
+
+app_registration:
+  nome: "Vértice — E-mail e Agenda"
+  tipo_conta: organizacional   # contas pessoais não suportadas
+  permissoes_delegadas:
+    - User.Read
+    - Mail.Read
+    - Calendars.Read
+    - offline_access
+  permissoes_de_aplicativo: []   # nenhuma
+  escrita: false
+
+coleta:
+  intervalo_minutos: 10
+  historico_inicial_meses: 12   # configurável 3..24
+  anexos: somente_nome
+  ignorar_sensitivity_private: true
+  filtros_admin: [pastas_excluidas, dominios_excluidos]
+
+consentimento:
+  por_usuario: ga
+  por_administrador_tenant: beta   # flag m365.admin_consent
+  lista_permissao: gerida_no_entra   # "atribuição de usuário obrigatória" no aplicativo empresarial
+
+revogacao:
+  usuario: imediata
+  admin_vertice: desconectar_todos
+  admin_entra: revogar_consentimento_ou_remover_app
